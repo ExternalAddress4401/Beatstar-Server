@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Request, Response } from "express";
 import { getUser } from "../utilities/getUser";
 import prisma from "../lib/PrismaClient";
+import Logger from "../lib/Logger";
 
 const schema = z.object({
   androidId: z.string().length(16),
@@ -15,6 +16,8 @@ export const getScores = async (req: Request, res: Response) => {
 
   const { androidId } = result.data;
 
+  Logger.log(`Got score request for ${androidId}`);
+
   const user = await getUser(androidId);
 
   if (!user) {
@@ -22,7 +25,7 @@ export const getScores = async (req: Request, res: Response) => {
     return;
   }
 
-  const scores = prisma.score.findMany({
+  const scores = await prisma.score.findMany({
     select: {
       beatmapId: true,
       score: true,
@@ -31,6 +34,8 @@ export const getScores = async (req: Request, res: Response) => {
       userId: user.userId,
     },
   });
+
+  Logger.log(`Scores: ${scores}`);
 
   res.json(scores);
   res.end();

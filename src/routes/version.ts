@@ -1,12 +1,9 @@
 import { z } from "zod";
 import { promises as fs } from "fs";
-import prisma from "../lib/PrismaClient";
 import Logger from "../lib/Logger";
 import { Request, Response } from "express";
-import { getUser } from "../utilities/getUser";
 
 const schema = z.object({
-  androidId: z.string().length(16),
   version: z.string(),
 });
 
@@ -17,24 +14,11 @@ export const version = async (req: Request, res: Response) => {
     return;
   }
 
-  const { androidId, version } = result.data;
+  const { version } = result.data;
 
-  let user = await getUser(androidId);
+  Logger.log(`Someone using version ${version} connected`);
 
-  //add a row for them
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        androidId,
-      },
-    });
-  }
-
-  Logger.log(
-    `Script version request: ${user.username ?? androidId} - version ${version}`
-  );
-
-  const serverVersion = (await fs.readFile("./version")).toString();
+  const serverVersion = (await fs.readFile("./version.txt")).toString();
 
   res.write(serverVersion);
   res.end();
