@@ -2,6 +2,7 @@ import { z } from "zod";
 import { getUser } from "../utilities/getUser";
 import { Request, Response } from "express";
 import prisma from "../lib/PrismaClient";
+import { verifyAndroidId } from "../utilities/verifyAndroidId";
 
 const schema = z.object({
   androidId: z.string().length(16),
@@ -17,7 +18,10 @@ export const link = async (req: Request, res: Response) => {
 
   const { androidId, username, key } = result.data;
 
-  //TODO: validate key
+  if (!verifyAndroidId(androidId, key)) {
+    res.writeHead(400, "Invalid key provided.");
+    return res.end();
+  }
 
   const user = await getUser(androidId);
   if (!user) {
@@ -25,14 +29,19 @@ export const link = async (req: Request, res: Response) => {
     return res.end();
   }
 
-  await prisma.user.update({
-    data: {
-      username,
-    },
-    where: {
-      androidId,
-    },
-  });
+  try {
+    await prisma.user.update({
+      data: {
+        username,
+      },
+      where: {
+        androidId,
+      },
+    });
+    res.json({ success: true });
+  } catch (e) {
+    res.json({ success: false });
+  }
 
   res.end();
 };
