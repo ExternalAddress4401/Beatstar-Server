@@ -11,7 +11,7 @@ export const version = async (req: Request, res: Response) => {
   const result = schema.safeParse(req.body);
   if (!result.success) {
     res.writeHead(400, "Invalid body provided.");
-    return;
+    return res.end();
   }
 
   const { version } = result.data;

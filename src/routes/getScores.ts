@@ -11,7 +11,7 @@ const schema = z.object({
 export const getScores = async (req: Request, res: Response) => {
   const result = schema.safeParse(req.body);
   if (!result.success) {
-    return;
+    return res.end();
   }
 
   const { androidId } = result.data;
@@ -22,7 +22,7 @@ export const getScores = async (req: Request, res: Response) => {
 
   if (!user) {
     res.writeHead(400, "Invalid androidId provided.");
-    return;
+    return res.end();
   }
 
   const scores = await prisma.score.findMany({

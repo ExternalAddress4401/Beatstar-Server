@@ -12,7 +12,7 @@ const schema = z.object({
 export const link = async (req: Request, res: Response) => {
   const result = schema.safeParse(req.body);
   if (!result.success) {
-    return;
+    return res.end();
   }
 
   const { androidId, username, key } = result.data;
@@ -22,7 +22,7 @@ export const link = async (req: Request, res: Response) => {
   const user = await getUser(androidId);
   if (!user) {
     res.writeHead(400, "Invalid androidId provided.");
-    return;
+    return res.end();
   }
 
   await prisma.user.update({
