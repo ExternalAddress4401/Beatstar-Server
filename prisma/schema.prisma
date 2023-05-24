@@ -18,7 +18,7 @@ model User {
 }
 
 model Score {
-  beatmapId Int  @db.SmallInt
+  beatmapId Int
   score     Int
   user      User @relation(fields: [userId], references: [userId])
   userId    Int
