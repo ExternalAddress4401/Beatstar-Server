@@ -42,15 +42,17 @@ export const saveScore = async (req: Request, res: Response) => {
     return res.end();
   }
 
-  if (score > user.Score[0].score) {
-    Logger.log("Got a better score");
-    await prisma.score.upsert({
-      create: {
+  if (!user.Score.length) {
+    await prisma.score.create({
+      data: {
         userId: user.userId,
-        score,
         beatmapId,
+        score,
       },
-      update: {
+    });
+  } else if (score > user.Score[0].score) {
+    await prisma.score.update({
+      data: {
         score,
       },
       where: {
