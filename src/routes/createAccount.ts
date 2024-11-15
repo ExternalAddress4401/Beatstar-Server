@@ -5,7 +5,7 @@ import prisma from "../lib/PrismaClient";
 import Logger from "../lib/Logger";
 
 const schema = z.object({
-  androidId: z.string().length(16),
+  androidId: z.string(),
 });
 
 export const createAccount = async (req: Request, res: Response) => {

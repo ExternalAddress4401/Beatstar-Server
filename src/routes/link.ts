@@ -5,7 +5,7 @@ import prisma from "../lib/PrismaClient";
 import { verifyAndroidId } from "../utilities/verifyAndroidId";
 
 const schema = z.object({
-  androidId: z.string().length(16),
+  androidId: z.string(),
   username: z.string(),
   key: z.string(),
 });
