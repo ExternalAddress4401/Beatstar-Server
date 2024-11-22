@@ -1,13 +1,12 @@
 import { z } from "zod";
 import { Request, Response } from "express";
 import prisma from "../lib/PrismaClient";
-import { getUser } from "../utilities/getUser";
 import Logger from "../lib/Logger";
 
 const schema = z.object({
   androidId: z.string(),
   score: z.number().min(0).max(100000),
-  beatmapId: z.number().max(2147483647),
+  beatmapId: z.number(),
 });
 
 export const saveScore = async (req: Request, res: Response) => {

@@ -9,7 +9,7 @@ import { link } from "./routes/link";
 import { createAccount } from "./routes/createAccount";
 
 const app = express();
-const port = 6000;
+const port = 5000;
 
 app.use(express.json());
 
