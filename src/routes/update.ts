@@ -8,10 +8,12 @@ const schema = z.object({
 });
 
 export const update = async (req: Request, res: Response) => {
+  res.setHeader("Content-Type", "application/json");
+
   const result = await schema.safeParseAsync(req.body);
   if (!result.success) {
-    res.writeHead(400, "Invalid body provided.");
-    return res.end();
+    res.writeHead(400);
+    return res.end(JSON.stringify({ error: "Invalid body provided." }));
   }
 
   const { androidId, username } = result.data;
