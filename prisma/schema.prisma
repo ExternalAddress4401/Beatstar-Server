@@ -14,6 +14,7 @@ model User {
   userId    Int     @id @default(autoincrement())
   username  String? @unique
   androidId String  @unique
+  verified  Boolean @default(false)
   Score     Score[]
 }
 
