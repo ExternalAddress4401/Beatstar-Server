@@ -45,7 +45,7 @@ export const verify = async (req: Request, res: Response) => {
     res.writeHead(409);
     return res.end(
       JSON.stringify({
-        code: "alreasdy-verified",
+        code: "already-verified",
         error: "User is already verified.",
       })
     );
