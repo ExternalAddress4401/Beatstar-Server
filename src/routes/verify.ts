@@ -17,7 +17,7 @@ export const verify = async (req: Request, res: Response) => {
   const { username, token } = result.data;
 
   if (token !== process.env.TOKEN) {
-    res.writeHead(401, { error: "Invalid token." });
+    res.writeHead(401, { code: "invalid-token", error: "Invalid token." });
     return res.end();
   }
 
@@ -27,8 +27,19 @@ export const verify = async (req: Request, res: Response) => {
     },
   });
 
-  if (user?.verified) {
-    res.writeHead(409, { error: "User is already verified." });
+  if (!user) {
+    res.writeHead(404, {
+      code: "not-found",
+      error: "No user found with that username.",
+    });
+    return res.end();
+  }
+
+  if (user.verified) {
+    res.writeHead(409, {
+      code: "alreasdy-verified",
+      error: "User is already verified.",
+    });
     return res.end();
   }
 

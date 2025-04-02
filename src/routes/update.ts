@@ -22,7 +22,7 @@ export const update = async (req: Request, res: Response) => {
     },
   });
 
-  if (existingAccount?.username) {
+  if (!existingAccount || existingAccount?.username) {
     return res.end();
   }
 
