@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 import prisma from "../lib/PrismaClient";
+import { promises as fs } from "fs";
 
 const schema = z.object({
   androidId: z.string(),
@@ -28,12 +29,16 @@ export const update = async (req: Request, res: Response) => {
     return res.end();
   }
 
-  await prisma.user.update({
-    data: {
-      username,
-    },
-    where: {
-      androidId,
-    },
-  });
+  try {
+    await prisma.user.update({
+      data: {
+        username,
+      },
+      where: {
+        androidId,
+      },
+    });
+  } catch (e) {
+    await fs.appendFile("./log.txt", username + " " + androidId + "\n");
+  }
 };
