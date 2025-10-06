@@ -5,7 +5,7 @@ import { promises as fs } from "fs";
 export const script = async (req: Request, res: Response) => {
   Logger.log(`Someone requested the latest script.`);
 
-  const version = (await fs.readFile("./version.txt")).toString();
+  const version = (await fs.readFile("./version.txt")).toString().trim();
 
   const script = (
     await fs.readFile(`./scripts/${version}/script.js`)
