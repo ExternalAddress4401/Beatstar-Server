@@ -8,7 +8,7 @@ export const scriptios = async (req: Request, res: Response) => {
   const version = (await fs.readFile("./iosversion.txt")).toString();
 
   const script = (
-    await fs.readFile(`./iosscripts/${version}/script.js`)
+    await fs.readFile(`./iosscripts/${version.trim()}/script.js`)
   ).toString();
 
   res.write(script);
